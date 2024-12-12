@@ -30,5 +30,16 @@ public class ProdutoController {
         return produto;
     }
 
+        @GetMapping("/{id}")
+    public Produto obterProduto(@RequestParam String id) {
+         //pode ser esse
+        //Optional<Produto> produto = produtoRepository.findById(id);
+        //return produto.isPresent()?produto.get():null;
+
+       //ou esse
+        return produtoRepository.findById(id).orElse(null);
+    }
+
+
 
 }
