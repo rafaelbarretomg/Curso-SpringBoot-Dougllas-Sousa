@@ -1,9 +1,10 @@
 package com.example.arquiteturaspring.montadora.configuration;
 
-import com.example.arquiteturaspring.montadora.Motor;
-import com.example.arquiteturaspring.montadora.TipoMotor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.example.arquiteturaspring.montadora.Motor;
+import com.example.arquiteturaspring.montadora.TipoMotor;
 
 @Configuration
 public class MontadoraConfiguration {
