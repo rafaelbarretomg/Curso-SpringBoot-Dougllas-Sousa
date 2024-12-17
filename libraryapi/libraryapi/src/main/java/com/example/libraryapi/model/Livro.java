@@ -2,6 +2,7 @@ package com.example.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.UUID;
 //Gera Getter, setters, constructors, hash e equals, tostring tudo no @Data
 @Data
 @Entity
+@ToString(exclude = "autor")
 @Table(name = "livro")
 public class Livro {
 
@@ -35,7 +37,10 @@ public class Livro {
     private BigDecimal preco;
 
     @JoinColumn(name = "id_autor", nullable = false)
-    @ManyToOne
+    @ManyToOne(
+            //cascade = CascadeType.ALL
+            fetch = FetchType.LAZY
+    )
     private Autor autor;
 
 
