@@ -28,12 +28,12 @@ class LivroRepositoryTest {
         livro.setIsbn("90887-45648");
         livro.setPreco(BigDecimal.valueOf(100));
         livro.setGenero(GeneroLivro.FICCAO);
-        livro.setTitulo("UFO");
+        livro.setTitulo("Livrao 1");
         livro.setDataPublicacao(LocalDate.of(1980,1,2));
 
         Autor autor = autorRepository
-                .findById(UUID.fromString("32c22609-f0e1-4990-a01a-d4e74e7ddc82"))
-                .orElse(null);
+                .findById(UUID.fromString("d5016493-cf4d-45d6-a358-b9c53d0f0c4e"))
+                .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
 
         livro.setAutor(autor);
 
@@ -43,14 +43,14 @@ class LivroRepositoryTest {
     @Test
     void salvarAutorELivroTest(){
         Livro livro = new Livro();
-        livro.setIsbn("90887-45548");
+        livro.setIsbn("90387-45548");
         livro.setPreco(BigDecimal.valueOf(100));
-        livro.setGenero(GeneroLivro.FICCAO);
-        livro.setTitulo("UFO 3");
+        livro.setGenero(GeneroLivro.CIENCIA);
+        livro.setTitulo("Guaranesia");
         livro.setDataPublicacao(LocalDate.of(1980,1,2));
 
         Autor autor = new Autor();
-        autor.setNome("Jose");
+        autor.setNome("Joao");
         autor.setNacionalidade("Brasileira");
         autor.setDataNascimento(LocalDate.of(1953, 1, 31));
 
@@ -159,8 +159,30 @@ class LivroRepositoryTest {
         resultado.forEach(System.out::println);
     }
 
+    @Test
+    void listarPorGeneroQueryParamTest(){
+        var resultado = repository.findByGenero(GeneroLivro.FICCAO, "dataPublicacao");
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarPorGeneroPositionalParamTest(){
+        var resultado = repository.findByGeneroPositionalParameters(GeneroLivro.FICCAO, "dataPublicacao");
+        resultado.forEach(System.out::println);
+    }
 
 
+    @Test
+    void deletePorGeneroTest(){
+        repository.deleteByGenero(GeneroLivro.CIENCIA);
+    }
+
+
+    @Test
+    void updateDataPublicacaoTest(){
+        UUID idLivro = UUID.fromString("6411e372-dd07-4b43-af89-cd5e758bbd9d");
+        repository.updateDataPublicacao(LocalDate.of(2000, 1, 1), idLivro);
+    }
 
 
 }
