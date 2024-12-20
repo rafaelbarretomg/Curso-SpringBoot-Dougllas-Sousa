@@ -34,7 +34,8 @@ public class Autor {
     private String nacionalidade;
 
     //Cuidado ao usar cascade, Onetomany por padrao é lazy
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY)
+            //cascade = CascadeType.ALL,
     private List<Livro> livros;
 
     @CreatedDate
