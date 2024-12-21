@@ -4,6 +4,7 @@ import com.example.libraryapi.model.GeneroLivro;
 import com.example.libraryapi.model.Livro;
 import com.example.libraryapi.repository.LivroRepository;
 import com.example.libraryapi.repository.specs.LivroSpecs;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,22 @@ public class LivroService {
             specs = specs.and(generoEqual(genero));
         }
 
+        if(anoPublicacao != null){
+            specs = specs.and(anoPublicacaoEqual(anoPublicacao));
+        }
+
+        if(nomeAutor != null){
+            specs = specs.and(nomeAutorLike(nomeAutor));
+        }
+
         return livroRepository.findAll(specs);
     }
 
+    public void atualizar(Livro livro) {
+        if(livro.getId() == null ){
+            throw new IllegalArgumentException("Para atualizar, eh necessario que o livro ja esteja salvo na base");
+        }
+
+        livroRepository.save(livro);
+    }
 }
