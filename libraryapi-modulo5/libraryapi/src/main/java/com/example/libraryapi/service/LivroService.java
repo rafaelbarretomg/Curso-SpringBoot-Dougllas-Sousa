@@ -4,8 +4,12 @@ import com.example.libraryapi.model.GeneroLivro;
 import com.example.libraryapi.model.Livro;
 import com.example.libraryapi.repository.LivroRepository;
 import com.example.libraryapi.repository.specs.LivroSpecs;
+import com.example.libraryapi.validator.LivroValidator;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +24,10 @@ import static com.example.libraryapi.repository.specs.LivroSpecs.*;
 public class LivroService {
 
     private final LivroRepository livroRepository;
+    private final LivroValidator validator;
 
     public Livro salvar(Livro livro) {
+        validator.validar(livro);
         return livroRepository.save(livro);
     }
 
@@ -33,12 +39,14 @@ public class LivroService {
         livroRepository.delete(livro);
     }
 
-    public List<Livro> pesquisa(
+    public Page<Livro> pesquisa(
             String isbn,
             String titulo,
             String nomeAutor,
             GeneroLivro genero,
-            Integer anoPublicacao
+            Integer anoPublicacao,
+            Integer pagina,
+            Integer tamanhoPagina
     ) {
         //select * from livro where isbn = :isbn and nomeAutor =
 //        Specification<Livro> specs = Specification
@@ -70,10 +78,13 @@ public class LivroService {
             specs = specs.and(nomeAutorLike(nomeAutor));
         }
 
-        return livroRepository.findAll(specs);
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        return livroRepository.findAll(specs, pageRequest);
     }
 
     public void atualizar(Livro livro) {
+        validator.validar(livro);
         if(livro.getId() == null ){
             throw new IllegalArgumentException("Para atualizar, eh necessario que o livro ja esteja salvo na base");
         }
